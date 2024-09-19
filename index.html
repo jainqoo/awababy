@@ -3,64 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multiple Rive Animations</title>
-   <script src="https://unpkg.com/@rive-app/canvas@latest"></script>
+    <title>Rive Files with State Machines</title>
     <style>
         body {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
+            background-color: #f7f7f7; /* 아주 연한 회색 */
+            font-family: Arial, sans-serif;
+            color: #333;
         }
-        canvas {
-            border: 1px solid #ddd;
-            margin: 10px;
+        .rive-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+        label {
+            margin-right: 10px;
         }
     </style>
+    <script src="https://unpkg.com/@rive-app/webgl"></script>
 </head>
 <body>
 
-    <canvas id="bg_wave" width="300" height="300"></canvas>
-    <canvas id="icon_recording" width="300" height="300"></canvas>
-    <canvas id="reason01" width="300" height="300"></canvas>
-    <canvas id="reason02" width="300" height="300"></canvas>
-    <canvas id="reason03" width="300" height="300"></canvas>
-    <canvas id="reason04" width="300" height="300"></canvas>
-    <canvas id="reason05" width="300" height="300"></canvas>
-    <canvas id="reason06" width="300" height="300"></canvas>
-    <canvas id="reason07" width="300" height="300"></canvas>
-    <canvas id="reason08" width="300" height="300"></canvas>
-    <canvas id="reason09" width="300" height="300"></canvas>
-    <canvas id="reason10" width="300" height="300"></canvas>
-    <canvas id="reason11" width="300" height="300"></canvas>
-    <canvas id="reason99" width="300" height="300"></canvas>
+    <h1>Rive File Showcase</h1>
+
+    <!-- Rive 파일 목록 -->
+    <div class="rive-container">
+        <h2>bg_wave.riv</h2>
+        <canvas id="riveCanvas1" width="500" height="500"></canvas>
+    </div>
+
+    <div class="rive-container">
+        <h2>icon.recording.riv</h2>
+        <canvas id="riveCanvas2" width="500" height="500"></canvas>
+    </div>
+
+    <!-- Reason 시리즈 Rive 파일 -->
+    <div class="rive-container">
+        <h2>Reason01.riv</h2>
+        <canvas id="riveCanvas3" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason01Input">Reason01 Input:</label>
+            <input type="checkbox" id="reason01Input" onchange="toggleState(machine3, 'Reason01')">
+            <label for="textInput1">Text Input:</label>
+            <input type="checkbox" id="textInput1" onchange="toggleState(machine3, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason02.riv</h2>
+        <canvas id="riveCanvas4" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason02Input">Reason02 Input:</label>
+            <input type="checkbox" id="reason02Input" onchange="toggleState(machine4, 'Reason02')">
+            <label for="textInput2">Text Input:</label>
+            <input type="checkbox" id="textInput2" onchange="toggleState(machine4, 'Text')">
+        </div>
+    </div>
+
+    <!-- 다른 Reason 시리즈도 같은 형식으로 추가 -->
+    <!-- Reason03, Reason04 등... -->
 
     <script>
-        const riveFiles = [
-            { id: 'bg_wave', src: 'bg_wave.riv' },
-            { id: 'icon_recording', src: 'icon.recording.riv' },
-            { id: 'reason01', src: 'Reason01.riv' },
-            { id: 'reason02', src: 'Reason02.riv' },
-            { id: 'reason03', src: 'Reason03.riv' },
-            { id: 'reason04', src: 'Reason04.riv' },
-            { id: 'reason05', src: 'Reason05.riv' },
-            { id: 'reason06', src: 'Reason06.riv' },
-            { id: 'reason07', src: 'Reason07.riv' },
-            { id: 'reason08', src: 'Reason08.riv' },
-            { id: 'reason09', src: 'Reason09.riv' },
-            { id: 'reason10', src: 'Reason10.riv' },
-            { id: 'reason11', src: 'Reason11.riv' },
-            { id: 'reason99', src: 'Reason99.riv' },
+        const files = [
+            { name: 'bg_wave.riv', canvas: 'riveCanvas1' },
+            { name: 'icon.recording.riv', canvas: 'riveCanvas2' },
+            { name: 'Reason01.riv', canvas: 'riveCanvas3' },
+            { name: 'Reason02.riv', canvas: 'riveCanvas4' },
+            // 나머지 Reason 시리즈 추가
         ];
 
-        riveFiles.forEach(file => {
-            const canvas = document.getElementById(file.id);
-            new rive.Rive({
-                src: file.src,
-                canvas: canvas,
+        let machine3, machine4;
+
+        files.forEach((file, index) => {
+            new Rive({
+                src: file.name,
+                canvas: document.getElementById(file.canvas),
+                stateMachines: ['State Machine 1'], // State Machine 이름
                 autoplay: true,
+                onLoad: (rive) => {
+                    if (file.name.includes('Reason')) {
+                        window[`machine${index+1}`] = rive.stateMachineInputs('State Machine 1');
+                    }
+                }
             });
         });
+
+        function toggleState(machine, inputName) {
+            const input = machine.find(input => input.name === inputName);
+            if (input) {
+                input.value = !input.value;
+            }
+        }
     </script>
 
 </body>
