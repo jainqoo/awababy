@@ -50,26 +50,24 @@
                 onLoad: () => {
                     const inputs = riveInstance.stateMachineInputs('State Machine 1'); // 여기에 실제 상태 머신 이름 입력
 
+                    const textInput = inputs.find(i => i.name === 'Text');
+                    
                     // Reason01.riv의 경우
                     if (file.id === 'reason01') {
-                        const textInput = inputs.find(i => i.name === 'Text');
                         const reason01Toggle = inputs.find(i => i.name === 'Reason01');
 
-                        // Text는 On, Reason01과 Reason02는 Off 상태로 설정
+                        // Text는 On, Reason01은 On, Reason02는 Off 상태로 설정
                         textInput.value = true; // On
-                        reason01Toggle.value = false; // Off
-                        reason02Toggle.value = false; // Off
+                        reason01Toggle.value = true; // On
                     }
 
-                    // Reason02.riv의 경우 (예시로 동일한 로직 사용)
+                    // Reason02.riv의 경우
                     if (file.id === 'reason02') {
-                        const textInput = inputs.find(i => i.name === 'Text');
                         const reason02Toggle = inputs.find(i => i.name === 'Reason02');
 
-                        // Text는 On, Reason01과 Reason02는 Off 상태로 설정
+                        // Text는 On, Reason01은 Off, Reason02는 On 상태로 설정
                         textInput.value = true; // On
-                        reason01Toggle.value = false; // Off
-                        reason02Toggle.value = false; // Off
+                        reason02Toggle.value = true; // On
                     }
                 },
             });
