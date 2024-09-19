@@ -79,9 +79,10 @@
                 autoplay: true,
                 stateMachines: file.stateMachine ? [file.stateMachine] : [],
                 onLoad: (rive) => {
-                    // 파일 이름에 'Reason'이 포함된 경우 상태 머신 저장
+                    console.log(`${file.src} loaded successfully`);
                     if (file.id.includes('reason')) {
                         window[`machine${file.id.charAt(0).toUpperCase() + file.id.slice(1)}`] = rive.stateMachineInputs(file.stateMachine);
+                        console.log(`State machine loaded for ${file.src}`);
                     }
                 },
                 onError: (error) => {
