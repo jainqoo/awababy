@@ -58,38 +58,39 @@
         </div>
     </div>
 
-    <!-- 추가적으로 Reason03 ~ Reason11, Reason99 같은 형식으로 계속 추가 가능 -->
+    <!-- 나머지 Reason 시리즈 추가 가능 -->
 
     <script>
         const riveFiles = [
-            { id: 'bg_wave', src: 'bg_wave.riv' },
-            { id: 'icon_recording', src: 'icon.recording.riv' },
-            { id: 'reason01', src: 'Reason01.riv', stateMachine: 'State Machine 1' },
-            { id: 'reason02', src: 'Reason02.riv', stateMachine: 'State Machine 1' },
-            // 나머지 Reason 시리즈 파일들도 동일한 형식으로 추가 가능
+            { id: 'bg_wave', src: 'https://jainqoo.github.io/awababy/bg_wave.riv' },
+            { id: 'icon_recording', src: 'https://jainqoo.github.io/awababy/icon.recording.riv' },
+            { id: 'reason01', src: 'https://jainqoo.github.io/awababy/Reason01.riv', stateMachine: 'State Machine 1' },
+            { id: 'reason02', src: 'https://jainqoo.github.io/awababy/Reason02.riv', stateMachine: 'State Machine 1' },
+            // 나머지 Reason 시리즈 추가 가능
         ];
 
         let machineReason01, machineReason02;
 
         riveFiles.forEach(file => {
-    const canvas = document.getElementById(file.id);
-    const riveInstance = new rive.Rive({
-        src: file.src,
-        canvas: canvas,
-        autoplay: true,
-        stateMachines: file.stateMachine ? [file.stateMachine] : [],
-        onLoad: (rive) => {
-            console.log(`${file.src} loaded successfully`);
-            if (file.id.includes('reason')) {
-                window[`machine${file.id.charAt(0).toUpperCase() + file.id.slice(1)}`] = rive.stateMachineInputs(file.stateMachine);
-                console.log(`State machine loaded for ${file.src}`);
-            }
-        },
-        onError: (error) => {
-            console.error(`Problem loading file ${file.src}:`, error);
-        }
-    });
-});
+            const canvas = document.getElementById(file.id);
+            const riveInstance = new rive.Rive({
+                src: file.src,
+                canvas: canvas,
+                autoplay: true,
+                stateMachines: file.stateMachine ? [file.stateMachine] : [],
+                onLoad: (rive) => {
+                    console.log(`${file.src} loaded successfully`);
+                    if (file.id.includes('reason')) {
+                        window[`machine${file.id.charAt(0).toUpperCase() + file.id.slice(1)}`] = rive.stateMachineInputs(file.stateMachine);
+                        console.log(`State machine loaded for ${file.src}`);
+                    }
+                },
+                onError: (error) => {
+                    console.error(`Problem loading file ${file.src}:`, error);
+                }
+            });
+        });
+
         function toggleState(machine, inputName) {
             if (!machine) {
                 console.error("State machine is not loaded.");
