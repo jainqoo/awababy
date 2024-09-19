@@ -46,15 +46,14 @@
                 src: file.src,
                 canvas: canvas,
                 autoplay: true,
-                stateMachines: 'StateMachineName', // 여기에 실제 상태 머신 이름 입력
+                stateMachines: 'State Machine 1', // 여기에 실제 상태 머신 이름 입력
                 onLoad: () => {
-                    const inputs = riveInstance.stateMachineInputs('StateMachineName'); // 여기에 실제 상태 머신 이름 입력
+                    const inputs = riveInstance.stateMachineInputs('State Machine 1'); // 여기에 실제 상태 머신 이름 입력
 
                     // Reason01.riv의 경우
                     if (file.id === 'reason01') {
                         const textInput = inputs.find(i => i.name === 'Text');
                         const reason01Toggle = inputs.find(i => i.name === 'Reason01');
-                        const reason02Toggle = inputs.find(i => i.name === 'Reason02');
 
                         // Text는 On, Reason01과 Reason02는 Off 상태로 설정
                         textInput.value = true; // On
@@ -65,7 +64,6 @@
                     // Reason02.riv의 경우 (예시로 동일한 로직 사용)
                     if (file.id === 'reason02') {
                         const textInput = inputs.find(i => i.name === 'Text');
-                        const reason01Toggle = inputs.find(i => i.name === 'Reason01');
                         const reason02Toggle = inputs.find(i => i.name === 'Reason02');
 
                         // Text는 On, Reason01과 Reason02는 Off 상태로 설정
