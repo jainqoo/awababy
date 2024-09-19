@@ -83,41 +83,47 @@
     <!-- 필요한 다른 Reason 시리즈 파일도 위와 동일하게 추가 -->
 
     <script>
-        // Rive 파일 목록
-        const files = [
-            { name: 'bg_wave.riv', canvas: 'riveCanvas1' },
-            { name: 'icon.recording.riv', canvas: 'riveCanvas2' },
-            { name: 'Reason01.riv', canvas: 'riveCanvas3' },
-            { name: 'Reason02.riv', canvas: 'riveCanvas4' },
-            { name: 'Reason03.riv', canvas: 'riveCanvas5' },
-            // 필요한 Reason 시리즈 파일 계속 추가
-        ];
+        // 페이지가 로드되면 Rive 파일을 로드
+        window.onload = function () {
+            // Rive 파일 목록
+            const files = [
+                { name: 'bg_wave.riv', canvas: 'riveCanvas1' },
+                { name: 'icon.recording.riv', canvas: 'riveCanvas2' },
+                { name: 'Reason01.riv', canvas: 'riveCanvas3' },
+                { name: 'Reason02.riv', canvas: 'riveCanvas4' },
+                { name: 'Reason03.riv', canvas: 'riveCanvas5' },
+                // 필요한 Reason 시리즈 파일 계속 추가
+            ];
 
-        let machine3, machine4, machine5;
+            let machine3, machine4, machine5;
 
-        // Rive 파일을 로드하고 상태 머신 설정
-        files.forEach((file, index) => {
-            new Rive({
-                src: file.name,
-                canvas: document.getElementById(file.canvas),
-                stateMachines: ['State Machine 1'], // 모든 Rive 파일에서 'State Machine 1' 사용
-                autoplay: true,
-                onLoad: (rive) => {
-                    // 'Reason' 파일의 경우 상태 머신을 변수에 저장
-                    if (file.name.includes('Reason')) {
-                        window[`machine${index+1}`] = rive.stateMachineInputs('State Machine 1');
+            // Rive 파일을 로드하고 상태 머신 설정
+            files.forEach((file, index) => {
+                new Rive({
+                    src: file.name,
+                    canvas: document.getElementById(file.canvas),
+                    stateMachines: ['State Machine 1'], // 모든 Rive 파일에서 'State Machine 1' 사용
+                    autoplay: true,
+                    onLoad: (rive) => {
+                        // 'Reason' 파일의 경우 상태 머신을 변수에 저장
+                        if (file.name.includes('Reason')) {
+                            window[`machine${index+1}`] = rive.stateMachineInputs('State Machine 1');
+                        }
                     }
-                }
+                });
             });
-        });
 
-        // 상태를 토글하는 함수
-        function toggleState(machine, inputName) {
-            const input = machine.find(input => input.name === inputName);
-            if (input) {
-                input.value = !input.value;
+            // 상태를 토글하는 함수
+            function toggleState(machine, inputName) {
+                const input = machine.find(input => input.name === inputName);
+                if (input) {
+                    input.value = !input.value;
+                }
             }
-        }
+
+            // toggleState 함수를 전역으로 사용하기 위해 윈도우 객체에 추가
+            window.toggleState = toggleState;
+        };
     </script>
 
 </body>
