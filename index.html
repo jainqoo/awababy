@@ -17,49 +17,63 @@
             margin: 10px;
             background-color: #f7f7f7;
         }
+        .file-name {
+            text-align: center;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
 
-    <canvas id="bg_wave" width="300" height="300"></canvas>
-    <canvas id="icon_recording" width="300" height="300"></canvas>
-    <canvas id="reason01" width="300" height="300"></canvas>
-    <canvas id="reason02" width="300" height="300"></canvas>
-    <canvas id="reason03" width="300" height="300"></canvas>
-    <canvas id="reason04" width="300" height="300"></canvas>
-    <canvas id="reason05" width="300" height="300"></canvas>
-    <canvas id="reason06" width="300" height="300"></canvas>
-    <canvas id="reason07" width="300" height="300"></canvas>
-    <canvas id="reason08" width="300" height="300"></canvas>
-    <canvas id="reason09" width="300" height="300"></canvas>
-    <canvas id="reason10" width="300" height="300"></canvas>
-    <canvas id="reason11" width="300" height="300"></canvas>
-    <canvas id="reason99" width="300" height="300"></canvas>
+    <div>
+        <canvas id="reason01" width="300" height="300"></canvas>
+        <div class="file-name">Reason01.riv</div>
+    </div>
+    <div>
+        <canvas id="reason02" width="300" height="300"></canvas>
+        <div class="file-name">Reason02.riv</div>
+    </div>
 
     <script>
         const riveFiles = [
-            { id: 'bg_wave', src: 'bg_wave.riv' },
-            { id: 'icon_recording', src: 'icon.recording.riv' },
             { id: 'reason01', src: 'Reason01.riv' },
             { id: 'reason02', src: 'Reason02.riv' },
-            { id: 'reason03', src: 'Reason03.riv' },
-            { id: 'reason04', src: 'Reason04.riv' },
-            { id: 'reason05', src: 'Reason05.riv' },
-            { id: 'reason06', src: 'Reason06.riv' },
-            { id: 'reason07', src: 'Reason07.riv' },
-            { id: 'reason08', src: 'Reason08.riv' },
-            { id: 'reason09', src: 'Reason09.riv' },
-            { id: 'reason10', src: 'Reason10.riv' },
-            { id: 'reason11', src: 'Reason11.riv' },
-            { id: 'reason99', src: 'Reason99.riv' },
         ];
 
         riveFiles.forEach(file => {
             const canvas = document.getElementById(file.id);
-            new rive.Rive({
+            const riveInstance = new rive.Rive({
                 src: file.src,
                 canvas: canvas,
                 autoplay: true,
+                stateMachines: 'StateMachineName', // 여기에 실제 상태 머신 이름 입력
+                onLoad: () => {
+                    const inputs = riveInstance.stateMachineInputs('StateMachineName'); // 여기에 실제 상태 머신 이름 입력
+
+                    // Reason01.riv의 경우
+                    if (file.id === 'reason01') {
+                        const textInput = inputs.find(i => i.name === 'Text');
+                        const reason01Toggle = inputs.find(i => i.name === 'Reason01');
+                        const reason02Toggle = inputs.find(i => i.name === 'Reason02');
+
+                        // Text는 On, Reason01과 Reason02는 Off 상태로 설정
+                        textInput.value = true; // On
+                        reason01Toggle.value = false; // Off
+                        reason02Toggle.value = false; // Off
+                    }
+
+                    // Reason02.riv의 경우 (예시로 동일한 로직 사용)
+                    if (file.id === 'reason02') {
+                        const textInput = inputs.find(i => i.name === 'Text');
+                        const reason01Toggle = inputs.find(i => i.name === 'Reason01');
+                        const reason02Toggle = inputs.find(i => i.name === 'Reason02');
+
+                        // Text는 On, Reason01과 Reason02는 Off 상태로 설정
+                        textInput.value = true; // On
+                        reason01Toggle.value = false; // Off
+                        reason02Toggle.value = false; // Off
+                    }
+                },
             });
         });
     </script>
