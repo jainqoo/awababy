@@ -83,14 +83,24 @@
                     if (file.id.includes('reason')) {
                         window[`machine${file.id.charAt(0).toUpperCase() + file.id.slice(1)}`] = rive.stateMachineInputs(file.stateMachine);
                     }
+                },
+                onError: (error) => {
+                    console.error(`Problem loading file ${file.src}:`, error);
                 }
             });
         });
 
         function toggleState(machine, inputName) {
+            if (!machine) {
+                console.error("State machine is not loaded.");
+                return;
+            }
+
             const input = machine.find(input => input.name === inputName);
             if (input) {
                 input.value = !input.value;
+            } else {
+                console.error(`Input ${inputName} not found in the state machine.`);
             }
         }
     </script>
