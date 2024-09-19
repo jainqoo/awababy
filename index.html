@@ -142,13 +142,26 @@
                         reason02Toggle.value = false; // Off
                     }
 
-                    // Reason03~11, Reason99의 경우
-                    for (let i = 3; i <= 11; i++) {
+                    // Reason03~09의 경우
+                    for (let i = 3; i <= 9; i++) {
                         if (file.id === `reason${i}`) {
                             const reasonToggle = inputs.find(i => i.name === `Reason${i}`);
                             textInput.value = true; // On
                             reasonToggle.value = false; // Off
                         }
+                    }
+
+                    // Reason10, Reason11의 경우
+                    if (file.id === 'reason10') {
+                        const reason10Toggle = inputs.find(i => i.name === 'Reason10');
+                        textInput.value = true; // On
+                        reason10Toggle.value = false; // Off
+                    }
+
+                    if (file.id === 'reason11') {
+                        const reason11Toggle = inputs.find(i => i.name === 'Reason11');
+                        textInput.value = true; // On
+                        reason11Toggle.value = false; // Off
                     }
 
                     // Reason99의 경우
