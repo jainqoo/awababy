@@ -21,23 +21,99 @@
             text-align: center;
             margin-top: 5px;
         }
+        .inputs {
+            text-align: center;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
 
     <div>
+        <canvas id="bg_wave" width="300" height="300"></canvas>
+        <div class="file-name">bg_wave.riv</div>
+    </div>
+    <div>
+        <canvas id="icon_recording" width="300" height="300"></canvas>
+        <div class="file-name">icon.recording.riv</div>
+    </div>
+    <div>
         <canvas id="reason01" width="300" height="300"></canvas>
         <div class="file-name">Reason01.riv</div>
+        <div class="inputs">Inputs: Text, Reason01</div>
     </div>
     <div>
         <canvas id="reason02" width="300" height="300"></canvas>
         <div class="file-name">Reason02.riv</div>
+        <div class="inputs">Inputs: Text, Reason02</div>
+    </div>
+    <div>
+        <canvas id="reason03" width="300" height="300"></canvas>
+        <div class="file-name">Reason03.riv</div>
+        <div class="inputs">Inputs: Text, Reason03</div>
+    </div>
+    <div>
+        <canvas id="reason04" width="300" height="300"></canvas>
+        <div class="file-name">Reason04.riv</div>
+        <div class="inputs">Inputs: Text, Reason04</div>
+    </div>
+    <div>
+        <canvas id="reason05" width="300" height="300"></canvas>
+        <div class="file-name">Reason05.riv</div>
+        <div class="inputs">Inputs: Text, Reason05</div>
+    </div>
+    <div>
+        <canvas id="reason06" width="300" height="300"></canvas>
+        <div class="file-name">Reason06.riv</div>
+        <div class="inputs">Inputs: Text, Reason06</div>
+    </div>
+    <div>
+        <canvas id="reason07" width="300" height="300"></canvas>
+        <div class="file-name">Reason07.riv</div>
+        <div class="inputs">Inputs: Text, Reason07</div>
+    </div>
+    <div>
+        <canvas id="reason08" width="300" height="300"></canvas>
+        <div class="file-name">Reason08.riv</div>
+        <div class="inputs">Inputs: Text, Reason08</div>
+    </div>
+    <div>
+        <canvas id="reason09" width="300" height="300"></canvas>
+        <div class="file-name">Reason09.riv</div>
+        <div class="inputs">Inputs: Text, Reason09</div>
+    </div>
+    <div>
+        <canvas id="reason10" width="300" height="300"></canvas>
+        <div class="file-name">Reason10.riv</div>
+        <div class="inputs">Inputs: Text, Reason10</div>
+    </div>
+    <div>
+        <canvas id="reason11" width="300" height="300"></canvas>
+        <div class="file-name">Reason11.riv</div>
+        <div class="inputs">Inputs: Text, Reason11</div>
+    </div>
+    <div>
+        <canvas id="reason99" width="300" height="300"></canvas>
+        <div class="file-name">Reason99.riv</div>
+        <div class="inputs">Inputs: Text, Reason99</div>
     </div>
 
     <script>
         const riveFiles = [
+            { id: 'bg_wave', src: 'bg_wave.riv' },
+            { id: 'icon_recording', src: 'icon.recording.riv' },
             { id: 'reason01', src: 'Reason01.riv' },
             { id: 'reason02', src: 'Reason02.riv' },
+            { id: 'reason03', src: 'Reason03.riv' },
+            { id: 'reason04', src: 'Reason04.riv' },
+            { id: 'reason05', src: 'Reason05.riv' },
+            { id: 'reason06', src: 'Reason06.riv' },
+            { id: 'reason07', src: 'Reason07.riv' },
+            { id: 'reason08', src: 'Reason08.riv' },
+            { id: 'reason09', src: 'Reason09.riv' },
+            { id: 'reason10', src: 'Reason10.riv' },
+            { id: 'reason11', src: 'Reason11.riv' },
+            { id: 'reason99', src: 'Reason99.riv' },
         ];
 
         riveFiles.forEach(file => {
@@ -55,8 +131,6 @@
                     // Reason01.riv의 경우
                     if (file.id === 'reason01') {
                         const reason01Toggle = inputs.find(i => i.name === 'Reason01');
-
-                        // Text는 On, Reason01은 Off 상태로 설정
                         textInput.value = true; // On
                         reason01Toggle.value = false; // Off
                     }
@@ -64,10 +138,24 @@
                     // Reason02.riv의 경우
                     if (file.id === 'reason02') {
                         const reason02Toggle = inputs.find(i => i.name === 'Reason02');
-
-                        // Text는 On, Reason01은 Off 상태로 설정
                         textInput.value = true; // On
                         reason02Toggle.value = false; // Off
+                    }
+
+                    // Reason03~11, Reason99의 경우
+                    for (let i = 3; i <= 11; i++) {
+                        if (file.id === `reason${i}`) {
+                            const reasonToggle = inputs.find(i => i.name === `Reason${i}`);
+                            textInput.value = true; // On
+                            reasonToggle.value = false; // Off
+                        }
+                    }
+
+                    // Reason99의 경우
+                    if (file.id === 'reason99') {
+                        const reason99Toggle = inputs.find(i => i.name === 'Reason99');
+                        textInput.value = true; // On
+                        reason99Toggle.value = false; // Off
                     }
                 },
             });
