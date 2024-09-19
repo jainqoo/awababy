@@ -1,75 +1,450 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rive Animations</title>
-  <script src="https://unpkg.com/@vue/runtime-dom"></script>
-  <script src="https://unpkg.com/@rive-app/canvas@latest"></script>
-  <style>
-    /* CSS 스타일은 위와 동일하게 유지 */
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rive Files with State Machines</title>
+    <style>
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .rive-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f7f7f7; /* 아주 연한 회색 */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+        label {
+            margin-right: 10px;
+        }
+    </style>
+    <!-- Rive 라이브러리 -->
+    <script src="https://unpkg.com/@rive-app/webgl@0.7.13"></script>
 </head>
 <body>
-  <div id="app"></div>
-  <script>
-    const riveFiles = [
-      { name: 'bg_wave.riv', canvasId: 'riveCanvas1', stateMachine: 'State Machine 1' },
-      { name: 'icon.recording.riv', canvasId: 'riveCanvas2', stateMachine: undefined },
-      { name: 'Reason01.riv', canvasId: 'riveCanvas3', stateMachine: 'State Machine 1' },
-      { name: 'Reason02.riv', canvasId: 'riveCanvas4', stateMachine: 'State Machine 1' },
-      // ... 나머지 Reason 시리즈 추가
-      { name: 'Reason99.riv', canvasId: 'riveCanvas14', stateMachine: 'State Machine 1' },
-    ];
 
-    const app = Vue.createApp({
-      data() {
-        return {
-          riveInstances: [],
-        };
-      },
-      methods: {
-        toggleState(rive, inputName) {
-          const input = rive.find(input => input.name === inputName);
-          if (input) {
-            input.value = !input.value;
-          }
-        },
-      },
-      mounted() {
-        riveFiles.forEach(file => {
-          const riveInstance = new Rive({
-            src: file.name,
-            canvas: document.getElementById(file.canvasId),
-            autoplay: true,
-            stateMachines: file.stateMachine ? [file.stateMachine] : undefined,
-            onLoad: (rive) => {
-              if (file.stateMachine) {
-                this.riveInstances.push(rive.stateMachineInputs(file.stateMachine));
-              }
-            },
-          });
-          this.riveInstances.push(riveInstance);
-        });
-      },
-      template: `
-        <div>
-          <template v-for="file in riveFiles" :key="file.canvasId">
-            <div class="rive-container">
-              <h2>{{ file.name }}</h2>
-              <canvas :id="file.canvasId" width="500" height="500"></canvas>
-              <div class="controls">
-                <template v-for="input in riveInstances[riveInstances.indexOf(file)]">
-                  <label :for="input.name + file.canvasId">{{ input.name }}:</label>
-                  <input type="checkbox" :id="input.name + file.canvasId" v-on:change="toggleState(riveInstances[riveInstances.indexOf(file)], input.name)">
-                </template>
-              </div>
-            </div>
-          </template>
+    <h1>Rive File Showcase</h1>
+
+    <!-- Rive 파일 목록 -->
+    <div class="rive-container">
+        <h2>bg_wave.riv</h2>
+        <canvas id="riveCanvas1" width="500" height="500"></canvas>
+    </div>
+
+    <div class="rive-container">
+        <h2>icon.recording.riv</h2>
+        <canvas id="riveCanvas2" width="500" height="500"></canvas>
+    </div>
+
+    <!-- Reason 시리즈 Rive 파일 -->
+    <div class="rive-container">
+        <h2>Reason01.riv</h2>
+        <canvas id="riveCanvas3" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason01Input">Reason01:</label>
+            <input type="checkbox" id="reason01Input" onchange="toggleState(machine3, 'Reason01')">
+            <label for="textInput1">Text:</label>
+            <input type="checkbox" id="textInput1" onchange="toggleState(machine3, 'Text')">
         </div>
-      `,
-    });
-    app.mount('#app');
-  </script>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason02.riv</h2>
+        <canvas id="riveCanvas4" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason02Input">Reason02:</label>
+            <input type="checkbox" id="reason02Input" onchange="toggleState(machine4, 'Reason02')">
+            <label for="textInput2">Text:</label>
+            <input type="checkbox" id="textInput2" onchange="toggleState(machine4, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason03.riv</h2>
+        <canvas id="riveCanvas5" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason03Input">Reason03:</label>
+            <input type="checkbox" id="reason03Input" onchange="toggleState(machine5, 'Reason03')">
+            <label for="textInput3">Text:</label>
+            <input type="checkbox" id="textInput3" onchange="toggleState(machine5, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason04.riv</h2>
+        <canvas id="riveCanvas6" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason04Input">Reason04:</label>
+            <input type="checkbox" id="reason04Input" onchange="toggleState(machine6, 'Reason04')">
+            <label for="textInput4">Text:</label>
+            <input type="checkbox" id="textInput4" onchange="toggleState(machine6, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason05.riv</h2>
+        <canvas id="riveCanvas7" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason05Input">Reason05:</label>
+            <input type="checkbox" id="reason05Input" onchange="toggleState(machine7, 'Reason05')">
+            <label for="textInput5">Text:</label>
+            <input type="checkbox" id="textInput5" onchange="toggleState(machine7, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason06.riv</h2>
+        <canvas id="riveCanvas8" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason06Input">Reason06:</label>
+            <input type="checkbox" id="reason06Input" onchange="toggleState(machine8, 'Reason06')">
+            <label for="textInput6">Text:</label>
+            <input type="checkbox" id="textInput6" onchange="toggleState(machine8, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason07.riv</h2>
+        <canvas id="riveCanvas9" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason07Input">Reason07:</label>
+            <input type="checkbox" id="reason07Input" onchange="toggleState(machine9, 'Reason07')">
+            <label for="textInput7">Text:</label>
+            <input type="checkbox" id="textInput7" onchange="toggleState(machine9, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason08.riv</h2>
+        <canvas id="riveCanvas10" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason08Input">Reason08:</label>
+            <input type="checkbox" id="reason08Input" onchange="toggleState(machine10, 'Reason08')">
+            <label for="textInput8">Text:</label>
+            <input type="checkbox" id="textInput8" onchange="toggleState(machine10, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason09.riv</h2>
+        <canvas id="riveCanvas11" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason09Input">Reason09:</label>
+            <input type="checkbox" id="reason09Input" onchange="toggleState(machine11, 'Reason09')">
+            <label for="textInput9">Text:</label>
+            <input type="checkbox" id="textInput9" onchange="toggleState(machine11, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason10.riv</h2>
+        <canvas id="riveCanvas12" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason10Input">Reason10:</label>
+            <input type="checkbox" id="reason10Input" onchange="toggleState(machine12, 'Reason10')">
+            <label for="textInput10">Text:</label>
+            <input type="checkbox" id="textInput10" onchange="toggleState(machine12, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason11.riv</h2>
+        <canvas id="riveCanvas13" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason11Input">Reason11:</label>
+            <input type="checkbox" id="reason11Input" onchange="toggleState(machine13, 'Reason11')">
+            <label for="textInput11">Text:</label>
+            <input type="checkbox" id="textInput11" onchange="toggleState(machine13, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason99.riv</h2>
+        <canvas id="riveCanvas14" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason99Input">Reason99:</label>
+            <input type="checkbox" id="reason99Input" onchange="toggleState(machine14, 'Reason99')">
+            <label for="textInput12">Text:</label>
+            <input type="checkbox" id="textInput12" onchange="toggleState(machine14, 'Text')">
+        </div>
+    </div>
+
+    <script>
+        const files = [
+            { name: 'bg_wave.riv', canvas: 'riveCanvas1' },
+            { name: 'icon.recording.riv', canvas: 'riveCanvas2' },
+            { name: 'Reason01.riv', canvas: 'riveCanvas3' },
+            { name: 'Reason02.riv', canvas: 'riveCanvas4' },
+            { name: 'Reason03.riv', canvas: 'riveCanvas5' },
+            { name: 'Reason04.riv', canvas: 'riveCanvas6' },
+            { name: 'Reason05.riv', canvas: 'riveCanvas7' },
+            { name: 'Reason06.riv', canvas: 'riveCanvas8' },
+            { name: 'Reason07.riv', canvas: 'riveCanvas9' },
+            { name: 'Reason08.riv', canvas: 'riveCanvas10' },
+            { name: 'Reason09.riv', canvas: 'riveCanvas11' },
+            { name: 'Reason10.riv', canvas: 'riveCanvas12' },
+            { name: 'Reason11.riv', canvas: 'riveCanvas13' },
+            { name: 'Reason99.riv', canvas: 'riveCanvas14' },
+        ];
+
+        let machine3, machine4, machine5, machine6, machine7, machine8, machine9, machine10, machine11, machine12, machine13, machine14;
+
+        files.forEach((file, index) => {
+            new Rive({
+                src: file.name,
+                canvas: document.getElementById(file.canvas),
+                stateMachines: ['State Machine 1'],
+                autoplay: true,
+                onLoad: (rive) => {
+                    if (file.name.includes('Reason')) {
+                        window[`machine${index+1}`] = rive.stateMachineInputs('State Machine 1');
+                    }
+                }
+            });
+        });
+
+        function toggleState(machine, inputName) {
+            const input = machine.find(input => input.name === inputName);
+            if (input) {
+                input.value = !input.value;
+            }
+        }
+    </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rive Files with State Machines</title>
+    <style>
+        body {
+            background-color: #f7f7f7; /* 아주 연한 회색 */
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .rive-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+        label {
+            margin-right: 10px;
+        }
+    </style>
+    <!-- Rive 라이브러리 -->
+    <script src="https://unpkg.com/@rive-app/webgl@0.7.13"></script>
+</head>
+<body>
+
+    <h1>Rive File Showcase</h1>
+
+    <!-- Rive 파일 목록 -->
+    <div class="rive-container">
+        <h2>bg_wave.riv</h2>
+        <canvas id="riveCanvas1" width="500" height="500"></canvas>
+    </div>
+
+    <div class="rive-container">
+        <h2>icon.recording.riv</h2>
+        <canvas id="riveCanvas2" width="500" height="500"></canvas>
+    </div>
+
+    <!-- Reason 시리즈 Rive 파일 -->
+    <div class="rive-container">
+        <h2>Reason01.riv</h2>
+        <canvas id="riveCanvas3" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason01Input">Reason01:</label>
+            <input type="checkbox" id="reason01Input" onchange="toggleState(machine3, 'Reason01')">
+            <label for="textInput1">Text:</label>
+            <input type="checkbox" id="textInput1" onchange="toggleState(machine3, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason02.riv</h2>
+        <canvas id="riveCanvas4" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason02Input">Reason02:</label>
+            <input type="checkbox" id="reason02Input" onchange="toggleState(machine4, 'Reason02')">
+            <label for="textInput2">Text:</label>
+            <input type="checkbox" id="textInput2" onchange="toggleState(machine4, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason03.riv</h2>
+        <canvas id="riveCanvas5" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason03Input">Reason03:</label>
+            <input type="checkbox" id="reason03Input" onchange="toggleState(machine5, 'Reason03')">
+            <label for="textInput3">Text:</label>
+            <input type="checkbox" id="textInput3" onchange="toggleState(machine5, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason04.riv</h2>
+        <canvas id="riveCanvas6" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason04Input">Reason04:</label>
+            <input type="checkbox" id="reason04Input" onchange="toggleState(machine6, 'Reason04')">
+            <label for="textInput4">Text:</label>
+            <input type="checkbox" id="textInput4" onchange="toggleState(machine6, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason05.riv</h2>
+        <canvas id="riveCanvas7" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason05Input">Reason05:</label>
+            <input type="checkbox" id="reason05Input" onchange="toggleState(machine7, 'Reason05')">
+            <label for="textInput5">Text:</label>
+            <input type="checkbox" id="textInput5" onchange="toggleState(machine7, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason06.riv</h2>
+        <canvas id="riveCanvas8" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason06Input">Reason06:</label>
+            <input type="checkbox" id="reason06Input" onchange="toggleState(machine8, 'Reason06')">
+            <label for="textInput6">Text:</label>
+            <input type="checkbox" id="textInput6" onchange="toggleState(machine8, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason07.riv</h2>
+        <canvas id="riveCanvas9" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason07Input">Reason07:</label>
+            <input type="checkbox" id="reason07Input" onchange="toggleState(machine9, 'Reason07')">
+            <label for="textInput7">Text:</label>
+            <input type="checkbox" id="textInput7" onchange="toggleState(machine9, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason08.riv</h2>
+        <canvas id="riveCanvas10" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason08Input">Reason08:</label>
+            <input type="checkbox" id="reason08Input" onchange="toggleState(machine10, 'Reason08')">
+            <label for="textInput8">Text:</label>
+            <input type="checkbox" id="textInput8" onchange="toggleState(machine10, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason09.riv</h2>
+        <canvas id="riveCanvas11" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason09Input">Reason09:</label>
+            <input type="checkbox" id="reason09Input" onchange="toggleState(machine11, 'Reason09')">
+            <label for="textInput9">Text:</label>
+            <input type="checkbox" id="textInput9" onchange="toggleState(machine11, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason10.riv</h2>
+        <canvas id="riveCanvas12" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason10Input">Reason10:</label>
+            <input type="checkbox" id="reason10Input" onchange="toggleState(machine12, 'Reason10')">
+            <label for="textInput10">Text:</label>
+            <input type="checkbox" id="textInput10" onchange="toggleState(machine12, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason11.riv</h2>
+        <canvas id="riveCanvas13" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason11Input">Reason11:</label>
+            <input type="checkbox" id="reason11Input" onchange="toggleState(machine13, 'Reason11')">
+            <label for="textInput11">Text:</label>
+            <input type="checkbox" id="textInput11" onchange="toggleState(machine13, 'Text')">
+        </div>
+    </div>
+
+    <div class="rive-container">
+        <h2>Reason99.riv</h2>
+        <canvas id="riveCanvas14" width="500" height="500"></canvas>
+        <div class="controls">
+            <label for="reason99Input">Reason99:</label>
+            <input type="checkbox" id="reason99Input" onchange="toggleState(machine14, 'Reason99')">
+            <label for="textInput12">Text:</label>
+            <input type="checkbox" id="textInput12" onchange="toggleState(machine14, 'Text')">
+        </div>
+    </div>
+
+    <script>
+        const files = [
+            { name: 'bg_wave.riv', canvas: 'riveCanvas1' },
+            { name: 'icon.recording.riv', canvas: 'riveCanvas2' },
+            { name: 'Reason01.riv', canvas: 'riveCanvas3' },
+            { name: 'Reason02.riv', canvas: 'riveCanvas4' },
+            { name: 'Reason03.riv', canvas: 'riveCanvas5' },
+            { name: 'Reason04.riv', canvas: 'riveCanvas6' },
+            { name: 'Reason05.riv', canvas: 'riveCanvas7' },
+            { name: 'Reason06.riv', canvas: 'riveCanvas8' },
+            { name: 'Reason07.riv', canvas: 'riveCanvas9' },
+            { name: 'Reason08.riv', canvas: 'riveCanvas10' },
+            { name: 'Reason09.riv', canvas: 'riveCanvas11' },
+            { name: 'Reason10.riv', canvas: 'riveCanvas12' },
+            { name: 'Reason11.riv', canvas: 'riveCanvas13' },
+            { name: 'Reason99.riv', canvas: 'riveCanvas14' },
+        ];
+
+        let machine3, machine4, machine5, machine6, machine7, machine8, machine9, machine10, machine11, machine12, machine13, machine14;
+
+        files.forEach((file, index) => {
+            new Rive({
+                src: file.name,
+                canvas: document.getElementById(file.canvas),
+                stateMachines: ['State Machine 1'],
+                autoplay: true,
+                onLoad: (rive) => {
+                    if (file.name.includes('Reason')) {
+                        window[`machine${index+1}`] = rive.stateMachineInputs('State Machine 1');
+                    }
+                }
+            });
+        });
+
+        function toggleState(machine, inputName) {
+            const input = machine.find(input => input.name === inputName);
+            if (input) {
+                input.value = !input.value;
+            }
+        }
+    </script>
+
 </body>
 </html>
