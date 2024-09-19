@@ -1,108 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rive Files with State Machines</title>
-    <style>
-        body {
-            background-color: white;
-            font-family: Arial, sans-serif;
-            color: #333;
-        }
-        .rive-container {
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color:  #f7f7f7; /* 아주 연한 회색 */
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-        h2 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-        .controls {
-            margin-top: 10px;
-        }
-        label {
-            margin-right: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rive Animations</title>
+  <script src="https://unpkg.com/@vue/runtime-dom"></script>
   <script src="https://unpkg.com/@rive-app/canvas@latest"></script>
+  <style>
+    /* CSS 스타일은 위와 동일하게 유지 */
+  </style>
 </head>
 <body>
+  <div id="app"></div>
+  <script>
+    const riveFiles = [
+      { name: 'bg_wave.riv', canvasId: 'riveCanvas1', stateMachine: 'State Machine 1' },
+      { name: 'icon.recording.riv', canvasId: 'riveCanvas2', stateMachine: undefined },
+      { name: 'Reason01.riv', canvasId: 'riveCanvas3', stateMachine: 'State Machine 1' },
+      { name: 'Reason02.riv', canvasId: 'riveCanvas4', stateMachine: 'State Machine 1' },
+      // ... 나머지 Reason 시리즈 추가
+      { name: 'Reason99.riv', canvasId: 'riveCanvas14', stateMachine: 'State Machine 1' },
+    ];
 
-    <h1>Rive File Showcase</h1>
-
-    <!-- Rive 파일 목록 -->
-    <div class="rive-container">
-        <h2>bg_wave.riv</h2>
-        <canvas id="riveCanvas1" width="500" height="500"></canvas>
-    </div>
-
-    <div class="rive-container">
-        <h2>icon.recording.riv</h2>
-        <canvas id="riveCanvas2" width="500" height="500"></canvas>
-    </div>
-
-    <!-- Reason 시리즈 Rive 파일 -->
-    <div class="rive-container">
-        <h2>Reason01.riv</h2>
-        <canvas id="riveCanvas3" width="500" height="500"></canvas>
-        <div class="controls">
-            <label for="reason01Input">Reason01:</label>
-            <input type="checkbox" id="reason01Input" onchange="toggleState(machine3, 'Reason01')">
-            <label for="textInput1">Text:</label>
-            <input type="checkbox" id="textInput1" onchange="toggleState(machine3, 'Text')">
-        </div>
-    </div>
-
-    <div class="rive-container">
-        <h2>Reason02.riv</h2>
-        <canvas id="riveCanvas4" width="500" height="500"></canvas>
-        <div class="controls">
-            <label for="reason02Input">Reason02:</label>
-            <input type="checkbox" id="reason02Input" onchange="toggleState(machine4, 'Reason02')">
-            <label for="textInput2">Text:</label>
-            <input type="checkbox" id="textInput2" onchange="toggleState(machine4, 'Text')">
-        </div>
-    </div>
-
-    <!-- 다른 Reason 시리즈도 같은 형식으로 추가 -->
-    <!-- Reason03, Reason04 등... -->
-
-    <script>
-        const files = [
-            { name: 'bg_wave.riv', canvas: 'riveCanvas1' },
-            { name: 'icon.recording.riv', canvas: 'riveCanvas2' },
-            { name: 'Reason01.riv', canvas: 'riveCanvas3' },
-            { name: 'Reason02.riv', canvas: 'riveCanvas4' },
-            // 나머지 Reason 시리즈 추가
-        ];
-
-        let machine3, machine4;
-
-        files.forEach((file, index) => {
-            new Rive({
-                src: file.name,
-                canvas: document.getElementById(file.canvas),
-                stateMachines: ['State Machine 1'], // State Machine 이름
-                autoplay: true,
-                onLoad: (rive) => {
-                    if (file.name.includes('Reason')) {
-                        window[`machine${index+1}`] = rive.stateMachineInputs('State Machine 1');
-                    }
-                }
-            });
+    const app = Vue.createApp({
+      data() {
+        return {
+          riveInstances: [],
+        };
+      },
+      methods: {
+        toggleState(rive, inputName) {
+          const input = rive.find(input => input.name === inputName);
+          if (input) {
+            input.value = !input.value;
+          }
+        },
+      },
+      mounted() {
+        riveFiles.forEach(file => {
+          const riveInstance = new Rive({
+            src: file.name,
+            canvas: document.getElementById(file.canvasId),
+            autoplay: true,
+            stateMachines: file.stateMachine ? [file.stateMachine] : undefined,
+            onLoad: (rive) => {
+              if (file.stateMachine) {
+                this.riveInstances.push(rive.stateMachineInputs(file.stateMachine));
+              }
+            },
+          });
+          this.riveInstances.push(riveInstance);
         });
-
-        function toggleState(machine, inputName) {
-            const input = machine.find(input => input.name === inputName);
-            if (input) {
-                input.value = !input.value;
-            }
-        }
-    </script>
-
+      },
+      template: `
+        <div>
+          <template v-for="file in riveFiles" :key="file.canvasId">
+            <div class="rive-container">
+              <h2>{{ file.name }}</h2>
+              <canvas :id="file.canvasId" width="500" height="500"></canvas>
+              <div class="controls">
+                <template v-for="input in riveInstances[riveInstances.indexOf(file)]">
+                  <label :for="input.name + file.canvasId">{{ input.name }}:</label>
+                  <input type="checkbox" :id="input.name + file.canvasId" v-on:change="toggleState(riveInstances[riveInstances.indexOf(file)], input.name)">
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+      `,
+    });
+    app.mount('#app');
+  </script>
 </body>
 </html>
