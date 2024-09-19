@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiple Rive Animations</title>
-    <script src="https://unpkg.com/@rive-app/canvas@latest"></script>
+    <script src="https://unpkg.com/@rive-app/canvas@0.6.15"></script>
     <style>
         body {
             display: flex;
@@ -22,11 +22,35 @@
 
     <canvas id="bg_wave" width="300" height="300"></canvas>
     <canvas id="icon_recording" width="300" height="300"></canvas>
+    <canvas id="reason01" width="300" height="300"></canvas>
+    <canvas id="reason02" width="300" height="300"></canvas>
+    <canvas id="reason03" width="300" height="300"></canvas>
+    <canvas id="reason04" width="300" height="300"></canvas>
+    <canvas id="reason05" width="300" height="300"></canvas>
+    <canvas id="reason06" width="300" height="300"></canvas>
+    <canvas id="reason07" width="300" height="300"></canvas>
+    <canvas id="reason08" width="300" height="300"></canvas>
+    <canvas id="reason09" width="300" height="300"></canvas>
+    <canvas id="reason10" width="300" height="300"></canvas>
+    <canvas id="reason11" width="300" height="300"></canvas>
+    <canvas id="reason99" width="300" height="300"></canvas>
 
     <script>
         const riveFiles = [
             { id: 'bg_wave', src: 'bg_wave.riv' },
             { id: 'icon_recording', src: 'icon.recording.riv' },
+            { id: 'reason01', src: 'Reason01.riv' },
+            { id: 'reason02', src: 'Reason02.riv' },
+            { id: 'reason03', src: 'Reason03.riv' },
+            { id: 'reason04', src: 'Reason04.riv' },
+            { id: 'reason05', src: 'Reason05.riv' },
+            { id: 'reason06', src: 'Reason06.riv' },
+            { id: 'reason07', src: 'Reason07.riv' },
+            { id: 'reason08', src: 'Reason08.riv' },
+            { id: 'reason09', src: 'Reason09.riv' },
+            { id: 'reason10', src: 'Reason10.riv' },
+            { id: 'reason11', src: 'Reason11.riv' },
+            { id: 'reason99', src: 'Reason99.riv' },
         ];
 
         riveFiles.forEach(file => {
