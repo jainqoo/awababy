@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiple Rive Animations with Toggle</title>
-    <script src="https://cdn.jsdelivr.net/npm/@rive-app/canvas@latest"></script>
+    <!-- JSDelivr CDN으로 변경 -->
+    <script src="https://cdn.jsdelivr.net/npm/@rive-app/canvas@2.21.1"></script>
     <style>
         body {
             display: flex;
@@ -74,6 +75,7 @@
                 src: file.src,
                 canvas: canvas,
                 autoplay: true,
+                wasmUrl: 'https://cdn.jsdelivr.net/npm/@rive-app/canvas@2.21.1/rive.wasm',  // 명시적 WASM 경로 설정
                 stateMachines: file.stateMachine ? [file.stateMachine] : [],
                 onLoad: (rive) => {
                     console.log(`${file.src} loaded successfully`);
