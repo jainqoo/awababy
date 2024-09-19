@@ -80,8 +80,8 @@
 
     <!-- 필요한 다른 Reason 시리즈 파일도 위와 동일하게 추가 -->
 
-    <!-- Rive 라이브러리를 바디 하단에 추가하여 로드 -->
-    <script src="https://unpkg.com/@rive-app/webgl@0.7.13"></script>
+    <!-- Rive 라이브러리를 로드 -->
+    <script src="https://unpkg.com/@rive-app/canvas@0.7.17"></script>
 
     <script>
         // 페이지가 로드되면 Rive 파일을 로드
@@ -100,7 +100,7 @@
 
             // Rive 파일을 로드하고 상태 머신 설정
             files.forEach((file, index) => {
-                new Rive({
+                new rive.Rive({
                     src: file.name,
                     canvas: document.getElementById(file.canvas),
                     stateMachines: ['State Machine 1'], // 모든 Rive 파일에서 'State Machine 1' 사용
