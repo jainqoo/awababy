@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multiple Rive Animations with Toggle</title>
-    <!-- JSDelivr CDN으로 변경 -->
-    <script src="https://cdn.jsdelivr.net/npm/@rive-app/canvas@2.21.1"></script>
+    <title>Rive Animations Display</title>
+    <script src="https://cdn.jsdelivr.net/npm/@rive-app/canvas@2.21.1"></script> <!-- Rive 라이브러리 -->
     <style>
         body {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
             align-items: center;
@@ -24,40 +23,35 @@
             border: 1px solid #ddd;
             margin: 10px;
         }
-        .controls {
-            margin-top: 10px;
+        h2 {
+            font-size: 1rem;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
     <div class="rive-container">
+        <h2>bg_wave.riv</h2>
         <canvas id="bg_wave" width="300" height="300"></canvas>
     </div>
 
     <div class="rive-container">
+        <h2>icon_recording.riv</h2>
         <canvas id="icon_recording" width="300" height="300"></canvas>
     </div>
 
     <div class="rive-container">
+        <h2>Reason01.riv</h2>
         <canvas id="reason01" width="300" height="300"></canvas>
-        <div class="controls">
-            <label for="reason01Input">Reason01:</label>
-            <input type="checkbox" id="reason01Input" onchange="toggleState(machineReason01, 'Reason01')">
-            <label for="textInput01">Text:</label>
-            <input type="checkbox" id="textInput01" onchange="toggleState(machineReason01, 'Text')">
-        </div>
     </div>
 
     <div class="rive-container">
+        <h2>Reason02.riv</h2>
         <canvas id="reason02" width="300" height="300"></canvas>
-        <div class="controls">
-            <label for="reason02Input">Reason02:</label>
-            <input type="checkbox" id="reason02Input" onchange="toggleState(machineReason02, 'Reason02')">
-            <label for="textInput02">Text:</label>
-            <input type="checkbox" id="textInput02" onchange="toggleState(machineReason02, 'Text')">
-        </div>
     </div>
+
+    <!-- 필요한 다른 Reason 시리즈 파일들도 동일한 형식으로 추가 -->
 
     <script>
         const riveFiles = [
@@ -65,9 +59,8 @@
             { id: 'icon_recording', src: 'https://jainqoo.github.io/awababy/icon.recording.riv' },
             { id: 'reason01', src: 'https://jainqoo.github.io/awababy/Reason01.riv', stateMachine: 'State Machine 1' },
             { id: 'reason02', src: 'https://jainqoo.github.io/awababy/Reason02.riv', stateMachine: 'State Machine 1' },
+            // 다른 Reason 시리즈 파일도 이곳에 추가 가능
         ];
-
-        let machineReason01, machineReason02;
 
         riveFiles.forEach(file => {
             const canvas = document.getElementById(file.id);
@@ -75,18 +68,12 @@
                 src: file.src,
                 canvas: canvas,
                 autoplay: true,
-                wasmUrl: 'https://cdn.jsdelivr.net/npm/@rive-app/canvas@2.21.1/rive.wasm',  // 명시적 WASM 경로 설정
                 stateMachines: file.stateMachine ? [file.stateMachine] : [],
                 onLoad: (rive) => {
                     console.log(`${file.src} loaded successfully`);
-                    if (file.id.includes('reason')) {
+                    if (file.stateMachine) {
                         const stateMachine = rive.stateMachineInputs(file.stateMachine);
-                        if (stateMachine) {
-                            window[`machine${file.id.charAt(0).toUpperCase() + file.id.slice(1)}`] = stateMachine;
-                            console.log(`State machine loaded for ${file.src}:`, stateMachine);
-                        } else {
-                            console.error(`State machine not found for ${file.src}`);
-                        }
+                        console.log(`State machine inputs for ${file.src}:`, stateMachine.map(input => input.name));
                     }
                 },
                 onError: (error) => {
@@ -94,21 +81,6 @@
                 }
             });
         });
-
-        function toggleState(machine, inputName) {
-            if (!machine) {
-                console.error("State machine is not loaded.");
-                return;
-            }
-
-            const input = machine.find(input => input.name === inputName);
-            if (input) {
-                input.value = !input.value;
-                console.log(`Toggled ${inputName} in state machine.`);
-            } else {
-                console.error(`Input ${inputName} not found in the state machine.`);
-            }
-        }
     </script>
 
 </body>
